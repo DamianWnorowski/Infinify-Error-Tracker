@@ -1,0 +1,27 @@
+name: Infinify Error Tracker
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  log-errors:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y python3 python3-pip
+      - name: Run Infinify (example)
+        run: |
+          python3 /home/d/Infinify/main.py || echo "Error occurred: $(date)" >> error_log.txt
+          git add error_log.txt
+          git commit -m "Updated error log"
+          git push
+
